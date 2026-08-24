@@ -1,0 +1,19 @@
+services:
+  api:
+    build: ./backend
+    environment:
+      RORODJ_MODEL_PROVIDER: ${RORODJ_MODEL_PROVIDER:-fallback}
+      RORODJ_MODEL_NAME: ${RORODJ_MODEL_NAME:-qwen3:8b}
+      RORODJ_OLLAMA_URL: ${RORODJ_OLLAMA_URL:-http://host.docker.internal:11434}
+      RORODJ_CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+    ports:
+      - "8000:8000"
+
+  web:
+    build: ./frontend
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
